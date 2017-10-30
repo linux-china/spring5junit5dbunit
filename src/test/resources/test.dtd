@@ -1,0 +1,9 @@
+<!ELEMENT dataset (
+    PEOPLE*)>
+
+<!ELEMENT PEOPLE EMPTY>
+<!ATTLIST PEOPLE
+    id CDATA #REQUIRED
+    nick CDATA #IMPLIED
+>
+
