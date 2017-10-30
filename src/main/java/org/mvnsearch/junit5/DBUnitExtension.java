@@ -3,13 +3,12 @@ package org.mvnsearch.junit5;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.xml.FlatXmlDataSet;
-import org.dbunit.dataset.xml.FlatXmlProducer;
+import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.operation.DatabaseOperation;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.xml.sax.InputSource;
 
 import javax.sql.DataSource;
 import java.lang.reflect.Method;
@@ -47,7 +46,8 @@ public class DBUnitExtension implements BeforeAllCallback, BeforeEachCallback {
         String[] values = dataSet.value();
         if (values.length > 0) {
             for (String value : values) {
-                FlatXmlDataSet xmlDataSet = new FlatXmlDataSet(new FlatXmlProducer(new InputSource(this.getClass().getResourceAsStream(value))));
+                FlatXmlDataSetBuilder builder = new FlatXmlDataSetBuilder();
+                FlatXmlDataSet xmlDataSet = builder.build(this.getClass().getResource(value));
                 DatabaseOperation.CLEAN_INSERT.execute(connection, xmlDataSet);
             }
         }
